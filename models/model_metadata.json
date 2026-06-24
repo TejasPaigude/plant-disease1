@@ -1,0 +1,9 @@
+{
+    "architecture": "EfficientNetV2B0 transfer learning",
+    "input_size": 224,
+    "input_scale": "raw_0_255",
+    "num_classes": 38,
+    "class_indices_path": "models/class_indices.json",
+    "top_k_metric": "top_3_accuracy",
+    "notes": "Model contains its own EfficientNetV2 preprocessing. Do not divide inputs by 255 before prediction."
+}

@@ -1,0 +1,137 @@
+PLANT DISEASE DETECTION - QUICK REFERENCE
+Updated for EfficientNetV2 transfer-learning pipeline
+
+PROJECT PATH
+C:\Users\Tejaspaigude987\Desktop\Final Year Project\Project\plant-disease-detection-main (1)\plant-disease-detection-main
+
+1. OPEN PROJECT
+cd /d "C:\Users\Tejaspaigude987\Desktop\Final Year Project\Project\plant-disease-detection-main (1)\plant-disease-detection-main"
+venv\Scripts\activate
+python -m pip install -r requirements.txt
+
+2. TRAIN HIGH-ACCURACY MODEL
+train_high_accuracy.bat
+
+Manual equivalent:
+python model_training.py --epochs 80 --initial-epochs 20 --batch-size 32
+
+Outputs:
+models\plant_disease.keras
+models\history.json
+models\class_indices.json
+models\model_metadata.json
+models\training_log.csv
+
+3. CHECK REAL ACCURACY
+python evaluate_model.py
+
+Use this command for final project accuracy. Do not trust hard-coded UI text.
+
+4. RUN STREAMLIT UI
+streamlit run app.py
+
+Open:
+http://localhost:8501
+
+5. RUN FASTAPI BACKEND
+uvicorn api:app --host 0.0.0.0 --port 8000 --reload
+
+Open:
+http://localhost:8000/api/health
+http://localhost:8000/api/model-info
+
+6. RUN REACT FRONTEND
+Open a second terminal:
+
+cd /d "C:\Users\Tejaspaigude987\Desktop\Final Year Project\Project\plant-disease-detection-main (1)\plant-disease-detection-main\frontend"
+npm install
+npm start
+
+Open:
+http://localhost:3000
+
+Production build:
+npm run build
+
+7. UPDATED THEORY SUMMARY
+The old model used a custom CNN and had unstable validation accuracy. The new
+pipeline uses EfficientNetV2B0 transfer learning with ImageNet pretrained
+weights. Training happens in two phases: first the classification head is
+trained while the backbone is frozen, then upper backbone layers are fine-tuned
+with a lower learning rate.
+
+The model also uses augmentation, class weights for imbalanced data, top-3
+accuracy, saved class-index mapping, and saved preprocessing metadata. This
+combination is designed to improve accuracy and prevent wrong disease labels
+from being displayed.
+
+8. EXPECTED RESULT
+After retraining, a clean PlantVillage-style validation split can often reach
+about 95% to 98%, sometimes close to 99%. A guaranteed 100% is not realistic
+and may indicate overfitting or data leakage.
+
+9. TROUBLESHOOTING
+If FastAPI is missing:
+python -m pip install -r requirements.txt
+
+If React build/start fails:
+cd frontend
+npm install
+npm run build
+
+If model is missing or accuracy is poor:
+train_high_accuracy.bat
+python evaluate_model.py
+
+Full details:
+RUN_AND_THEORY_GUIDE.md
+
+MODEL WORKS LIKE THIS
+1. Input image is converted to RGB.
+2. Image is resized to 224 x 224.
+3. Preprocessing is selected from models\model_metadata.json.
+4. EfficientNetV2B0 extracts visual features from the leaf.
+5. The classification head produces 38 softmax probabilities.
+6. The highest probability is the main prediction.
+7. The top 3 probabilities are displayed.
+8. models\class_indices.json maps model output index to the correct disease folder.
+9. labels.json provides readable disease names and remedies.
+10. Grad-CAM shows the model focus area as a heatmap overlay.
+11. advisory.py provides treatment, prevention, irrigation, fertilizer, pesticide, organic, and crop-care guidance.
+
+IMPORTANT THRESHOLDS
+Top predictions shown: 3
+React high confidence: 80% and above
+React moderate confidence: 60% to 79%
+React low confidence: below 60%
+Configured confidence_threshold: 0.3 / 30%
+
+Note: Streamlit and FastAPI mark predictions below the configured threshold as
+uncertain. The app still shows top candidates so the user can compare symptoms,
+but low-confidence results should be confirmed with a clearer image or expert
+support.
+
+TRAINING RULES
+Image size: 224 x 224
+Batch size: 32
+Maximum epochs: 80
+Initial head-training epochs: 20
+Initial learning rate: 0.001
+Fine-tuning learning rate: 0.00001
+Dropout: 0.35
+Pretrained weights: ImageNet
+Early stopping: val_loss, patience 12, min_delta 0.0001
+Model checkpoint: best val_accuracy
+Learning rate reduction: factor 0.2 after 4 stuck validation-loss epochs
+
+EXPLAINABILITY AND ADVISORY
+Grad-CAM: generated from the EfficientNetV2B0 spatial feature layer
+Fallback: prediction still works if Grad-CAM cannot be generated
+Advisory: symptoms, causes, prevention, treatment, pesticide, fertilizer,
+organic treatment, irrigation, environmental triggers, and crop-care guidance
+
+METRICS
+accuracy = top-1 correct prediction rate
+top_3_accuracy = correct class appears in top 3 predictions
+loss = training error value, lower is usually better
+validation accuracy = most important final metric for reporting

@@ -27,11 +27,7 @@ def render_stats(history, class_names, metadata, model_path, threshold_percent):
             {_card("🔍 Disease Detection", "AI", "AI powered disease detection from leaf images.", "cyan")}
             {_card("🌱 Plant Types", f"{len(class_names or [])} Plant Types", "Comprehensive disease coverage.", "green")}
             {_card("📊 System Accuracy", "95%+", "Real-time AI prediction.", "purple")}
-        </div>
-        <div class="benefits-banner">
-            <h3>✨ Key Benefits</h3>
-            <p>✓ Advanced AI Detection &nbsp; ✓ Instant Results &nbsp; ✓ Treatment Recommendations &nbsp; ✓ Disease Prevention Tips</p>
-        </div>
+        
         """,
         unsafe_allow_html=True,
     )
@@ -52,8 +48,7 @@ def render_about(history, class_names):
                 {_card("Validation Accuracy", _history_best(history, "val_accuracy"), "Best validation run metric.", "cyan")}
                 {_card("Disease Classes", len(class_names or []), "Supported output classes.", "purple")}
                 {_card("Real-time Detection", "Enabled", "Single image inference workflow.", "orange")}
-            </div>
-        </section>
+       
         """,
         unsafe_allow_html=True,
     )

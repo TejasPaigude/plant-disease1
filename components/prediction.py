@@ -14,14 +14,12 @@ def _progress(value_percent):
 
 def render_empty_prediction():
     """Render a polished empty state."""
-    st.markdown(
-        """
-        <div class="prediction-card empty-result">
-            <p>📩 Upload an image to analyze</p>
-        </div>
-        """,
-        unsafe_allow_html=True,
+    html = (
+        '<div class="prediction-card empty-result">'
+        "<p>Upload an image to analyze</p>"
+        "</div>"
     )
+    st.markdown(html, unsafe_allow_html=True)
 
 
 def render_prediction_summary(result, threshold_percent):
@@ -35,21 +33,19 @@ def render_prediction_summary(result, threshold_percent):
     remedy = escape(result.get("remedy", "No recommendation available."))
     severity = _severity_label(confidence, uncertain)
 
-    st.markdown(
-        f"""
-        <div class="prediction-card">
-            <p class="section-kicker">Prediction Results</p>
-            <span class="status-pill {status_class}">{status_text}</span>
-            <h3 class="prediction-name">{display_name}</h3>
-            <p class="muted-copy">Model class: {class_name}</p>
-            <div class="confidence-row">
-                <span class="muted-copy">Confidence score</span>
-                <span class="confidence-number">{confidence:.1f}%</span>
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
+    html = (
+        '<div class="prediction-card">'
+        '<p class="section-kicker">Prediction Results</p>'
+        f'<span class="status-pill {status_class}">{status_text}</span>'
+        f'<h3 class="prediction-name">{display_name}</h3>'
+        f'<p class="muted-copy">Model class: {class_name}</p>'
+        '<div class="confidence-row">'
+        '<span class="muted-copy">Confidence score</span>'
+        f'<span class="confidence-number">{confidence:.1f}%</span>'
+        "</div>"
+        "</div>"
     )
+    st.markdown(html, unsafe_allow_html=True)
     _progress(confidence)
 
     if uncertain:
@@ -60,15 +56,13 @@ def render_prediction_summary(result, threshold_percent):
     else:
         st.success(f"Severity signal: {severity}")
 
-    st.markdown(
-        f"""
-        <div class="premium-card" style="padding:18px;margin-top:14px;">
-            <p class="stat-label">Immediate recommendation</p>
-            <p class="muted-copy" style="margin-bottom:0;">{remedy}</p>
-        </div>
-        """,
-        unsafe_allow_html=True,
+    html = (
+        '<div class="premium-card" style="padding:18px;margin-top:14px;">'
+        '<p class="stat-label">Immediate recommendation</p>'
+        f'<p class="muted-copy" style="margin-bottom:0;">{remedy}</p>'
+        "</div>"
     )
+    st.markdown(html, unsafe_allow_html=True)
 
 
 def render_top_predictions(results):
@@ -81,25 +75,21 @@ def render_top_predictions(results):
         display_name = escape(result.get("display", "Unknown"))
         confidence = float(result.get("confidence", 0.0))
         cards.append(
-            f"""
-            <div class="rank-card">
-                <span class="status-pill status-info">Rank {rank}</span>
-                <p class="rank-title">{display_name}</p>
-                <p class="muted-copy" style="margin:0 0 8px;">Confidence: {confidence:.1f}%</p>
-            </div>
-            """
+            f'<div class="rank-card">'
+            f'<span class="status-pill status-info">Rank {rank}</span>'
+            f'<p class="rank-title">{display_name}</p>'
+            f'<p class="muted-copy" style="margin:0 0 8px;">Confidence: {confidence:.1f}%</p>'
+            "</div>"
         )
 
-    st.markdown(
-        f"""
-        <div style="margin-top:18px;">
-            <p class="section-kicker">Alternatives</p>
-            <h3 class="card-title">Top prediction candidates</h3>
-            <div class="rank-grid">{''.join(cards)}</div>
-        </div>
-        """,
-        unsafe_allow_html=True,
+    html = (
+        '<div style="margin-top:18px;">'
+        '<p class="section-kicker">Alternatives</p>'
+        '<h3 class="card-title">Top prediction candidates</h3>'
+        f'<div class="rank-grid">{"".join(cards)}</div>'
+        "</div>"
     )
+    st.markdown(html, unsafe_allow_html=True)
 
 
 def render_gradcam_section(original_image, gradcam_payload):

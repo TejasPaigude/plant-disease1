@@ -73,7 +73,7 @@ PREDICTION_CONFIG = {
 
 # File Upload Configuration
 FILE_CONFIG = {
-    "allowed_extensions": ["jpg", "jpeg", "png", "bmp", "gif"],
-    "max_file_size_mb": 10,
+    "allowed_extensions": ["jpg", "jpeg", "png"],
+    "max_file_size_mb": 200,
     "required_image_size": (224, 224),
 }

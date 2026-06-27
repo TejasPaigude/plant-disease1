@@ -16,17 +16,8 @@ def render_empty_prediction():
     """Render a polished empty state."""
     st.markdown(
         """
-        <div class="prediction-card">
-            <span class="status-pill status-info">Waiting for image</span>
-            <h3 class="prediction-name">Ready to analyze</h3>
-            <p class="muted-copy">
-                Upload a leaf image to generate disease prediction, confidence score,
-                top alternatives, Grad-CAM explanation, and crop-care recommendations.
-            </p>
-            <div class="confidence-row">
-                <span class="muted-copy">Confidence</span>
-                <span class="confidence-number">--</span>
-            </div>
+        <div class="prediction-card empty-result">
+            <p>📩 Upload an image to analyze</p>
         </div>
         """,
         unsafe_allow_html=True,
@@ -47,6 +38,7 @@ def render_prediction_summary(result, threshold_percent):
     st.markdown(
         f"""
         <div class="prediction-card">
+            <p class="section-kicker">Prediction Results</p>
             <span class="status-pill {status_class}">{status_text}</span>
             <h3 class="prediction-name">{display_name}</h3>
             <p class="muted-copy">Model class: {class_name}</p>

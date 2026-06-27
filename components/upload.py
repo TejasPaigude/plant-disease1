@@ -7,12 +7,9 @@ def render_upload_panel():
     """Render the image upload card and return the uploaded file."""
     st.markdown(
         """
-        <div class="upload-card">
-            <p class="section-kicker">Input</p>
-            <h3 class="upload-title">Leaf image upload</h3>
+        <div class="upload-card compact-upload">
             <p class="muted-copy">
-                Use a clear, well-lit photo where the leaf occupies most of the frame.
-                Supported formats: JPG, JPEG, PNG, BMP, and GIF. Maximum size: 10 MB.
+                200MB per file · JPG, PNG, JPEG
             </p>
         """,
         unsafe_allow_html=True,
@@ -20,16 +17,13 @@ def render_upload_panel():
 
     uploaded_file = st.file_uploader(
         "Upload plant leaf image",
-        type=["jpg", "jpeg", "png", "bmp", "gif"],
+        type=["jpg", "jpeg", "png"],
         accept_multiple_files=False,
         label_visibility="collapsed",
     )
 
     st.markdown(
         """
-            <p class="muted-copy">
-                Tip: crop out unrelated background when possible for cleaner predictions.
-            </p>
         </div>
         """,
         unsafe_allow_html=True,

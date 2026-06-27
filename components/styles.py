@@ -9,7 +9,7 @@ def apply_global_styles():
         """
         <style>
         :root {
-            --bg: #0b1220;
+            --bg: #0d1117;
             --surface: #111827;
             --surface-2: #162033;
             --surface-3: #0f172a;
@@ -31,8 +31,12 @@ def apply_global_styles():
             background:
                 radial-gradient(circle at top left, rgba(34, 197, 94, 0.15), transparent 32rem),
                 radial-gradient(circle at top right, rgba(59, 130, 246, 0.14), transparent 34rem),
-                linear-gradient(135deg, #0b1220 0%, #101827 48%, #0f172a 100%);
+                linear-gradient(135deg, #0d1117 0%, #101827 48%, #111827 100%);
             color: var(--text);
+        }
+
+        #MainMenu, header, footer {
+            visibility: hidden;
         }
 
         .stApp {
@@ -57,11 +61,41 @@ def apply_global_styles():
 
         .block-container {
             max-width: 1240px;
-            padding: 3.1rem 2.2rem 4rem;
+            padding: 2.8rem 2.2rem 4rem;
         }
 
         h1, h2, h3, h4, h5, h6, p {
             letter-spacing: 0;
+        }
+
+        .top-title {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin: 8px 0 26px;
+        }
+
+        .top-title-icon {
+            font-size: 2rem;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .top-title h1 {
+            margin: 0;
+            color: #16a34a;
+            font-size: clamp(2.1rem, 4vw, 3rem);
+            font-weight: 900;
+            letter-spacing: 0.02em;
+            text-shadow: 0 0 22px rgba(34, 197, 94, 0.18);
+        }
+
+        .top-title p {
+            margin: 8px 0 0;
+            color: rgba(203, 213, 225, 0.72);
+            font-size: 0.95rem;
         }
 
         .hero-shell {
@@ -93,6 +127,19 @@ def apply_global_styles():
             max-width: 850px;
         }
 
+        .hero-centered {
+            text-align: center;
+        }
+
+        .hero-centered .hero-content {
+            margin: 0 auto;
+        }
+
+        .hero-centered .badge-row,
+        .hero-centered .cta-row {
+            justify-content: center;
+        }
+
         .badge-row {
             display: flex;
             flex-wrap: wrap;
@@ -115,9 +162,9 @@ def apply_global_styles():
 
         .hero-title {
             margin: 0;
-            max-width: 940px;
+            max-width: 980px;
             color: var(--text);
-            font-size: clamp(2.45rem, 7vw, 5.15rem);
+            font-size: clamp(2.35rem, 6vw, 4.7rem);
             line-height: 1.02;
             font-weight: 860;
         }
@@ -173,9 +220,9 @@ def apply_global_styles():
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-            gap: 14px;
-            margin: 22px 0 38px;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+            margin: 22px 0 16px;
         }
 
         .stat-card, .premium-card, .prediction-card, .upload-card, .info-card {
@@ -193,29 +240,72 @@ def apply_global_styles():
         }
 
         .stat-card {
-            padding: 18px;
-            min-height: 132px;
+            padding: 28px 22px;
+            min-height: 150px;
+            text-align: center;
+            border-radius: 18px;
+        }
+
+        .stat-cyan {
+            background: linear-gradient(135deg, #05c7d6, #0cb7bc);
+            box-shadow: 0 18px 48px rgba(6, 182, 212, 0.22);
+        }
+
+        .stat-green {
+            background: linear-gradient(135deg, #02b72d, #00991f);
+            box-shadow: 0 18px 48px rgba(34, 197, 94, 0.22);
+        }
+
+        .stat-purple {
+            background: linear-gradient(135deg, #a855f7, #7e22ce);
+            box-shadow: 0 18px 48px rgba(168, 85, 247, 0.22);
+        }
+
+        .stat-orange {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.24), rgba(17, 24, 39, 0.92));
+            box-shadow: 0 18px 48px rgba(245, 158, 11, 0.14);
+        }
+
+        .benefits-banner {
+            margin: 0 0 38px;
+            padding: 24px;
+            border-radius: 18px;
+            text-align: center;
+            border: 1px solid rgba(245, 158, 11, 0.32);
+            background: linear-gradient(90deg, rgba(245, 158, 11, 0.88), rgba(249, 115, 22, 0.82));
+            box-shadow: 0 18px 50px rgba(245, 158, 11, 0.18);
+        }
+
+        .benefits-banner h3 {
+            margin: 0 0 10px;
+            color: #fff7ed;
+            font-weight: 860;
+        }
+
+        .benefits-banner p {
+            margin: 0;
+            color: #fff7ed;
+            font-weight: 750;
         }
 
         .stat-label {
-            margin: 0 0 10px;
-            color: var(--muted);
-            font-size: 0.78rem;
+            margin: 0 0 14px;
+            color: rgba(255, 255, 255, 0.92);
+            font-size: 0.95rem;
             font-weight: 800;
-            text-transform: uppercase;
         }
 
         .stat-value {
             margin: 0;
             color: var(--text);
-            font-size: 1.75rem;
+            font-size: 1.2rem;
             font-weight: 860;
             line-height: 1.05;
         }
 
         .stat-note {
-            margin: 10px 0 0;
-            color: var(--muted);
+            margin: 18px 0 0;
+            color: rgba(255, 255, 255, 0.82);
             font-size: 0.84rem;
             line-height: 1.45;
         }
@@ -228,17 +318,32 @@ def apply_global_styles():
             margin: 12px 0 4px;
         }
 
+        .section-divider {
+            height: 1px;
+            margin: 34px 0 38px;
+            background: rgba(148, 163, 184, 0.18);
+        }
+
         .section-heading {
-            color: var(--text);
-            font-size: clamp(1.55rem, 4vw, 2.45rem);
+            color: #16a34a;
+            font-size: clamp(1.45rem, 3vw, 2.05rem);
             line-height: 1.16;
             margin: 0 0 18px;
             font-weight: 840;
         }
 
         .upload-card {
-            padding: 24px;
-            min-height: 360px;
+            padding: 0;
+            min-height: auto;
+            border: 0;
+            background: transparent;
+            box-shadow: none;
+        }
+
+        .compact-upload {
+            display: flex;
+            align-items: center;
+            gap: 14px;
         }
 
         .upload-title, .card-title {
@@ -263,8 +368,23 @@ def apply_global_styles():
         }
 
         .prediction-card {
-            padding: 24px;
-            min-height: 360px;
+            padding: 22px;
+            min-height: 128px;
+        }
+
+        .empty-result {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 82px;
+            border: 1px solid rgba(6, 182, 212, 0.86);
+            background: rgba(8, 36, 43, 0.38);
+        }
+
+        .empty-result p {
+            margin: 0;
+            color: #67e8f9;
+            font-weight: 750;
         }
 
         .prediction-name {
@@ -373,6 +493,54 @@ def apply_global_styles():
             font-size: 0.88rem;
         }
 
+        .tech-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 9px;
+            margin-top: 14px;
+        }
+
+        .tech-chip {
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            border-radius: 999px;
+            padding: 8px 11px;
+            color: #dbeafe;
+            background: rgba(15, 23, 42, 0.72);
+            font-weight: 750;
+        }
+
+        .about-card {
+            margin-top: 44px;
+            padding: clamp(24px, 4vw, 38px);
+            text-align: center;
+            border: 2px solid rgba(6, 182, 212, 0.72);
+            border-radius: 24px;
+            background: linear-gradient(180deg, rgba(17, 24, 39, 0.92), rgba(13, 17, 23, 0.90));
+            box-shadow: 0 20px 58px rgba(6, 182, 212, 0.12);
+        }
+
+        .about-card h2 {
+            margin: 0 0 12px;
+            color: var(--text);
+            font-weight: 860;
+        }
+
+        .about-card > p {
+            max-width: 780px;
+            margin: 0 auto 20px;
+            color: var(--muted);
+            line-height: 1.65;
+        }
+
+        .about-stats {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 18px;
+            text-align: left;
+        }
+
         .sidebar-brand {
             border: 1px solid rgba(148, 163, 184, 0.18);
             border-radius: 22px;
@@ -425,10 +593,10 @@ def apply_global_styles():
         }
 
         div[data-testid="stFileUploader"] {
-            border: 1px dashed rgba(34, 197, 94, 0.45);
-            border-radius: 22px;
-            padding: 16px;
-            background: rgba(2, 6, 23, 0.26);
+            border: 1px solid rgba(148, 163, 184, 0.12);
+            border-radius: 8px;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.06);
             transition: border-color .18s ease, background .18s ease;
         }
 
@@ -448,6 +616,7 @@ def apply_global_styles():
 
         @media (max-width: 980px) {
             .stats-grid,
+            .about-stats,
             .rank-grid,
             .advisory-grid,
             .gradcam-grid {
@@ -466,6 +635,7 @@ def apply_global_styles():
             }
 
             .stats-grid,
+            .about-stats,
             .rank-grid,
             .advisory-grid,
             .gradcam-grid {

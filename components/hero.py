@@ -52,29 +52,13 @@ def render_sidebar(model_ready, class_count, threshold_percent):
 
 
 def render_hero():
-    """Render the product-style landing section."""
+    """Render the screenshot-inspired centered title area."""
     st.markdown(
         """
-        <section class="hero-shell">
-            <div class="hero-content">
-                <div class="badge-row">
-                    <span class="soft-badge">AI powered diagnosis</span>
-                    <span class="soft-badge">Keras 3 compatible</span>
-                    <span class="soft-badge">Grad-CAM explainability</span>
-                    <span class="soft-badge">v2.0</span>
-                </div>
-                <h1 class="hero-title">
-                    Plant & Crop <span class="hero-gradient-text">Intelligence</span>
-                </h1>
-                <p class="hero-subtitle">
-                    Upload a leaf image and get disease prediction, confidence analysis,
-                    visual model focus maps, and practical crop-care recommendations in one workflow.
-                </p>
-                <div class="cta-row">
-                    <a class="primary-cta" href="#analysis">Start analysis</a>
-                    <a class="secondary-cta" href="#deployment">Deployment ready</a>
-                </div>
-            </div>
+        <section class="top-title">
+            <div class="top-title-icon">🌾</div>
+            <h1>Plant & Crop Intelligence</h1>
+            <p>AI Powered Plant Disease Detection & Crop Health Analysis</p>
         </section>
         """,
         unsafe_allow_html=True,

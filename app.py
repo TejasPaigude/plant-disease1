@@ -12,7 +12,7 @@ from components.prediction import (
     render_top_predictions,
 )
 from components.recommendations import render_advisory
-from components.stats import render_stats
+from components.stats import render_about, render_stats
 from components.styles import apply_global_styles
 from components.upload import render_image_preview, render_upload_panel
 from config import PATHS, PREDICTION_CONFIG, STREAMLIT_CONFIG
@@ -108,13 +108,7 @@ render_stats(
 )
 
 st.markdown("<div id='analysis'></div>", unsafe_allow_html=True)
-st.markdown(
-    """
-    <div class="section-kicker">Live diagnosis workspace</div>
-    <h2 class="section-heading">Upload a plant leaf image</h2>
-    """,
-    unsafe_allow_html=True,
-)
+st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
 
 upload_col, result_col = st.columns([0.95, 1.05], gap="large")
 uploaded_file = None
@@ -124,6 +118,7 @@ preprocessed = None
 gradcam_payload = None
 
 with upload_col:
+    st.markdown('<h2 class="section-heading">🔍 Upload Plant Image</h2>', unsafe_allow_html=True)
     uploaded_file = render_upload_panel()
 
     if uploaded_file:
@@ -135,6 +130,7 @@ with upload_col:
             uploaded_file = None
 
 with result_col:
+    st.markdown('<h2 class="section-heading">Prediction Results</h2>', unsafe_allow_html=True)
     if not uploaded_file:
         render_empty_prediction()
     elif not model_ready:
@@ -195,4 +191,5 @@ if uploaded_file and results and model_ready:
     )
     render_advisory(main_result.get("advisory", {}), main_result.get("remedy"))
 
+render_about(history, class_names)
 render_footer()

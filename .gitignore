@@ -1,116 +1,47 @@
-# Git ignore for Plant Disease Detection project
-
 # Python
 __pycache__/
 *.py[cod]
-*$py.class
-*.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-pip-wheel-metadata/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
 
 # Virtual environments
 venv/
+.venv/
 env/
-ENV/
-.venv
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-.project
-.pydevproject
-.settings/
-
-# Streamlit
-.streamlit/
+# Local environment and secrets
+.env
+.env.*
 .streamlit/secrets.toml
 
-# Cache and logs
-*.log
-.cache/
-.tmp/
-*.cache
-*.pkl
-*.pickle
+# Generated runtime artifacts
 logs/
-
-# OS files
-Thumbs.db
-.DS_Store
-.directory
-
-# Node/Frontend (ignore entire frontend folder)
-frontend/
-node_modules/
-npm-debug.log
-
-# Environment variables
-.env
-.env.local
-.env.*.local
-*.pem
-*.key
-
-# Temporary files
-*.bak
-*.backup
-*.temp
-~*
-
-# Jupyter
-.ipynb_checkpoints/
-*.ipynb
- 
-
-# Large data files (exclude - too large for GitHub)
-data/train/
-data/val/
-data/train_split/
-data/val_split/
-*.h5
-
-
-
-# Media files (optional)
-*.mp4
-*.mov
-*.avi
-
-# Keep labels and history for deployment (model too large - use Git LFS or upload separately)
-!labels.json
-!models/history.json
-# models/plant_disease.h5 - Use Git LFS for this large file or upload to cloud storage
-
-
-
-venv/
-data/
-__pycache__/
-
-*.pyc
-*.pyo
+tmp/
+temp/
 *.log
 
-.ipynb_checkpoints/
+# Training datasets are local-only and too large for app deployment
+data/
 
-models/plant_disease.backup.keras
+# Optional legacy frontend is not used by the Streamlit deployment
+frontend/
+
+# Keep the production model and metadata, ignore temporary checkpoints
+models/checkpoints/
+models/*.tmp
+models/*.backup
+models/*.bak
+models/*.h5
+!models/plant_disease.keras
+!models/class_indices.json
+!models/history.json
+!models/model_metadata.json
+!models/training_log.csv
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

@@ -58,8 +58,8 @@ CALLBACKS_CONFIG = {
 
 # Streamlit Configuration
 STREAMLIT_CONFIG = {
-    "page_title": "Plant Disease Detection",
-    "page_icon": "🍃",
+    "page_title": "Plant & Crop Intelligence",
+    "page_icon": "🌿",
     "layout": "wide",
     "initial_sidebar_state": "expanded",
 }

@@ -17,8 +17,9 @@ from PIL import Image
 from advisory import get_advisory
 
 try:
-    from config import PATHS, PREDICTION_CONFIG
+    from config import FILE_CONFIG, PATHS, PREDICTION_CONFIG
 except ImportError:
+    FILE_CONFIG = {}
     PATHS = {}
     PREDICTION_CONFIG = {}
 
@@ -549,15 +550,18 @@ def validate_image_file(uploaded_file):
     if uploaded_file is None:
         return False
 
-    valid_extensions = {"jpg", "jpeg", "png", "bmp", "gif"}
+    valid_extensions = set(
+        FILE_CONFIG.get("allowed_extensions", ["jpg", "jpeg", "png", "bmp", "gif"])
+    )
+    max_file_size_mb = int(FILE_CONFIG.get("max_file_size_mb", 10))
     file_extension = uploaded_file.name.split(".")[-1].lower()
 
     if file_extension not in valid_extensions:
         st.error(f"Invalid file type. Accepted formats: {', '.join(valid_extensions)}")
         return False
 
-    if uploaded_file.size > 10 * 1024 * 1024:
-        st.error("File size exceeds 10MB limit")
+    if uploaded_file.size > max_file_size_mb * 1024 * 1024:
+        st.error(f"File size exceeds {max_file_size_mb} MB limit")
         return False
 
     return True

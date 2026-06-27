@@ -1,83 +1,58 @@
-# Plant Disease Detection and Smart Crop Advisory System
+# Plant & Crop Intelligence
 
-AI agricultural assistant for plant disease detection, confidence analysis, Grad-CAM explainability, and crop-care recommendations.
+Premium AI plant disease detection and smart crop advisory system built with Streamlit, TensorFlow/Keras, EfficientNetV2B0, and FastAPI.
 
-## Overview
+The application detects plant diseases from leaf images, reports confidence and top alternatives, shows Grad-CAM visual explanations, and provides crop-care guidance including treatment, prevention, irrigation, fertilizer, pesticide, and organic management suggestions.
 
-This project uses an EfficientNetV2B0 transfer-learning model saved in native Keras format at `models/plant_disease.keras`. The system includes:
+## Key Features
 
-- Streamlit UI for leaf-image upload, prediction, confidence display, Grad-CAM visualization, and advisory panels
-- FastAPI backend for prediction and model information endpoints
-- EfficientNetV2B0 training pipeline with checkpoint validation and rollback-safe saving
-- Metadata-driven preprocessing so training and inference stay consistent
-- Class-index mapping so prediction outputs match the correct disease labels
-
-## Features
-
-- Disease classification across 38 PlantVillage classes
-- Top-3 predictions with confidence scores
+- Modern Streamlit interface with responsive dark SaaS-style layout
+- Native Keras model artifact: `models/plant_disease.keras`
+- EfficientNetV2B0 transfer-learning inference path
+- 38 PlantVillage disease classes
+- Top-3 prediction candidates with confidence scores
 - Configurable uncertainty threshold from `config.py`
-- Grad-CAM heatmap overlay showing where the model focused
-- Smart advisory for disease description, symptoms, causes, prevention, treatment, pesticide guidance, fertilizer guidance, organic options, irrigation advice, environmental triggers, and crop-care guidance
-- FastAPI response includes advisory and uncertainty fields
-- Native `.keras` model format for Keras 3 compatibility
+- Grad-CAM heatmap overlay for explainability
+- Smart agricultural advisory for every predicted class
+- FastAPI backend with `/api/health`, `/api/model-info`, and `/api/predict`
+- Streamlit Community Cloud deployment files
 
 ## Project Structure
 
 ```text
-app.py                       Streamlit UI
-api.py                       FastAPI backend
-advisory.py                  Agricultural advisory generator
-config.py                    Paths, model settings, thresholds
-model_training.py            EfficientNetV2B0 training pipeline
-evaluate_model.py            Validation evaluator
-utils.py                     Inference, preprocessing, Grad-CAM, model loading
-labels.json                  Display names and base remedies
-models/plant_disease.keras   Trained model
-models/history.json          Training history
-models/class_indices.json    Model output index mapping
-models/model_metadata.json   Preprocessing metadata
+app.py                         Streamlit app entry point
+api.py                         FastAPI backend
+advisory.py                    Disease advisory generation
+config.py                      Paths, model settings, thresholds, upload limits
+utils.py                       Model loading, preprocessing, prediction, Grad-CAM
+components/                    Reusable Streamlit UI components
+  hero.py                      Hero and sidebar
+  stats.py                     Model/system metric cards
+  upload.py                    Upload and image preview panels
+  prediction.py                Prediction, uncertainty, top-k, Grad-CAM panels
+  recommendations.py           Advisory tabs and cards
+  footer.py                    Footer
+  styles.py                    Central CSS theme
+models/
+  plant_disease.keras          Production model artifact
+  class_indices.json           Output-index to class-name mapping
+  model_metadata.json          Input size and preprocessing scale
+  history.json                 Training metrics
+labels.json                    Display names and base remedies
+tests/smoke_test.py            Local sanity check
+DEPLOYMENT.md                  Streamlit deployment guide
+CHANGELOG.md                   Project changes
 ```
 
-## Installation
+## Setup
 
 ```powershell
 cd "C:\Users\Tejaspaigude987\Desktop\Final Year Project\Project\plant-disease-detection-main (1)\plant-disease-detection-main"
+python -m venv venv
 venv\Scripts\activate
+python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
-
-## Train
-
-Recommended:
-
-```powershell
-python model_training.py --epochs 80 --initial-epochs 20 --batch-size 32
-```
-
-Or:
-
-```powershell
-train_high_accuracy.bat
-```
-
-Training outputs:
-
-```text
-models/plant_disease.keras
-models/history.json
-models/class_indices.json
-models/model_metadata.json
-models/training_log.csv
-```
-
-## Evaluate
-
-```powershell
-python evaluate_model.py
-```
-
-Use this command for the final reported validation accuracy.
 
 ## Run Streamlit UI
 
@@ -91,54 +66,61 @@ Open:
 http://localhost:8501
 ```
 
-The UI shows the uploaded image, primary prediction, top-3 predictions, confidence bars, uncertainty warnings, Grad-CAM overlay, and crop advisory tabs.
-
 ## Run FastAPI Backend
 
 ```powershell
 uvicorn api:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-Health:
+Endpoints:
 
 ```text
-http://localhost:8000/api/health
+GET  /api/health
+GET  /api/model-info
+POST /api/predict
 ```
 
-Model info:
+`POST /api/predict` expects a form field named `file` containing an image.
+
+## Train Model
+
+```powershell
+python model_training.py --epochs 80 --initial-epochs 20 --batch-size 32
+```
+
+Training outputs:
 
 ```text
-http://localhost:8000/api/model-info
+models/plant_disease.keras
+models/class_indices.json
+models/model_metadata.json
+models/history.json
+models/training_log.csv
 ```
 
-Prediction endpoint:
+## Evaluate Model
 
-```text
-POST http://localhost:8000/api/predict
-Form field: file=<image>
+```powershell
+python evaluate_model.py
 ```
 
-Response includes:
+The final reported accuracy should come from this evaluator or from a held-out test set, not from the UI display alone.
 
-```json
-{
-  "main_result": {
-    "display": "Tomato - Late Blight",
-    "predicted_display": "Tomato - Late Blight",
-    "class": "Tomato___Late_blight",
-    "confidence": 91.2,
-    "is_uncertain": false,
-    "confidence_threshold": 30.0,
-    "remedy": "Treatment recommendation",
-    "advisory": {}
-  },
-  "top_predictions": []
-}
-```
+## How Prediction Works
+
+1. The uploaded image is validated for extension and file size.
+2. The image is converted to RGB and resized to the model input size from `models/model_metadata.json`.
+3. Preprocessing uses the same input scale saved during training, usually `0_1`.
+4. `models/plant_disease.keras` returns class probabilities.
+5. `models/class_indices.json` maps each output index to the correct disease class.
+6. The app returns the top prediction plus top-3 alternatives.
+7. If confidence is below the configured threshold, the result is marked uncertain.
+8. Grad-CAM generates a heatmap from the model backbone to show regions that influenced the result.
+9. The advisory system generates practical crop guidance for the predicted class.
 
 ## Confidence Threshold
 
-`config.py` contains:
+`config.py` controls uncertainty handling:
 
 ```python
 PREDICTION_CONFIG = {
@@ -147,60 +129,67 @@ PREDICTION_CONFIG = {
 }
 ```
 
-`0.3` means 30%. If the top prediction is below this threshold, Streamlit and FastAPI mark the result as uncertain instead of presenting it as a fully trusted diagnosis.
+`0.3` means 30%. Predictions below this threshold are displayed as uncertain so the system does not overstate low-confidence results.
 
-## Grad-CAM
+## Grad-CAM Explainability
 
-Grad-CAM is generated from the last spatial feature layer inside the nested EfficientNetV2B0 backbone. The app overlays a red/yellow heatmap on the uploaded image so users can see the leaf regions that most influenced the prediction.
+Grad-CAM uses the final spatial layer inside the EfficientNet-style backbone. The app overlays the heatmap on the original image:
 
-If Grad-CAM fails, prediction still works and the UI shows a safe fallback message.
+- Red/yellow regions had stronger influence on the predicted class.
+- If Grad-CAM fails, prediction still works and the app shows a safe fallback message.
+- Grad-CAM is a visual explanation aid, not proof of disease presence.
 
 ## Advisory System
 
-`advisory.py` generates practical guidance for every class name. Each advisory includes:
+`advisory.py` creates advisory content for every class:
 
-- Disease description
+- Description
 - Symptoms
 - Causes
-- Prevention methods
-- Treatment recommendations
+- Environmental triggers
+- Prevention
+- Treatment
 - Pesticide suggestions
 - Fertilizer suggestions
-- Organic treatments
+- Organic treatment options
 - Irrigation advice
-- Environmental triggers
 - Crop-care guidance
 
-The guidance is decision support only. Severe cases should be confirmed with a local agricultural expert.
+The recommendations are decision support. Severe field cases should be confirmed with a local agricultural expert.
+
+## Local Smoke Test
+
+```powershell
+python tests\smoke_test.py
+```
+
+The smoke test validates model loading, metadata, class mapping, prediction, and Grad-CAM when a validation image is available.
+
+## Deployment
+
+See `DEPLOYMENT.md`.
+
+Current target: Streamlit Community Cloud.
+
+Important: training data should remain local and is ignored by `.gitignore`. The deployed app needs the model files in `models/`, not the full dataset.
 
 ## Troubleshooting
 
-If model loading fails:
+If the model does not load:
 
-```powershell
-python evaluate_model.py
-```
+- Confirm `models/plant_disease.keras` exists.
+- Confirm the file is not zero bytes or partially copied.
+- Confirm TensorFlow and Python versions match `requirements.txt` and `runtime.txt`.
+- Run `python tests\smoke_test.py`.
 
-Then verify:
+If predictions look wrong:
 
-- `models/plant_disease.keras` exists
-- `models/model_metadata.json` uses the correct preprocessing rule
-- `models/class_indices.json` has 38 classes
-- TensorFlow and Keras versions match the environment
+- Confirm `models/class_indices.json` matches the trained model.
+- Confirm `models/model_metadata.json` uses the same preprocessing scale as training.
+- Re-run `python evaluate_model.py` on `data/val_split`.
 
-If Grad-CAM is unavailable:
+If deployment fails:
 
-- Confirm the loaded model is the EfficientNetV2B0 transfer-learning model
-- Upload a clear leaf-focused image
-- Prediction can still be used without the heatmap
-
-## More Details
-
-See:
-
-```text
-RUN_AND_THEORY_GUIDE.md
-QUICK_REFERENCE.txt
-```
-
-Last updated: May 2026
+- Confirm `requirements.txt` is in the repository root.
+- Confirm large local folders such as `data/`, `venv/`, and `frontend/node_modules/` are not committed.
+- If TensorFlow cannot install on Streamlit Community Cloud, document the exact log error before preparing a fallback platform.
